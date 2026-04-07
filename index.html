@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Quran Hafiz - تطبيق حفظ القرآن الكريم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #10b981;
+            --primary-dark: #059669;
+            --secondary-color: #3b82f6;
+            --accent-color: #f59e0b;
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --gradient-primary: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: var(--bg-white);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-button {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: var(--shadow-md);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+            line-height: 1.2;
+        }
+
+        .hero-text h1 span {
+            color: var(--primary-color);
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-md);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary-color);
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid var(--primary-color);
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .hero-image {
+            position: relative;
+        }
+
+        .phone-mockup {
+            background: white;
+            border-radius: 40px;
+            padding: 20px;
+            box-shadow: var(--shadow-lg);
+            border: 8px solid #1e293b;
+            max-width: 400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .phone-screen {
+            background: var(--bg-light);
+            border-radius: 30px;
+            overflow: hidden;
+            height: 600px;
+            position: relative;
+        }
+
+        .app-preview {
+            padding: 20px;
+        }
+
+        .preview-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        .preview-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .section-title p {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: 20px;
+            transition: all 0.3s;
+            border: 1px solid var(--border-color);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .feature-card p {
+            color: var(--text-gray);
+            line-height: 1.8;
+        }
+
+        /* Screens Section */
+        .screens {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%);
+        }
+
+        .screens-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .screen-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s;
+        }
+
+        .screen-card:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .screen-image {
+            height: 400px;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .screen-info {
+            padding: 1.5rem;
+        }
+
+        .screen-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .screen-info p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-light);
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-item i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .stat-item .number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item .label {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 5rem 0;
+            background: var(--gradient-primary);
+            color: white;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .download-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .store-button {
+            background: white;
+            color: var(--text-dark);
+            padding: 15px 35px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-md);
+        }
+
+        .store-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .store-button i {
+            font-size: 1.8rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #cbd5e1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero-text h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .download-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-quran"></i>
+                    <span>Easy Quran Hafiz</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#home">الرئيسية</a></li>
+                    <li><a href="#features">المميزات</a></li>
+                    <li><a href="#screens">الشاشات</a></li>
+                    <li><a href="#stats">الإحصائيات</a></li>
+                    <li><a href="#contact">اتصل بنا</a></li>
+                </ul>
+                <a href="#download" class="cta-button">حمّل الآن</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text animate-in">
+                    <h1>رفيقك المثالي لحفظ <span>القرآن الكريم</span></h1>
+                    <p>تطبيق متكامل يساعدك على حفظ القرآن الكريم وتلاوته وتتبع تقدمك بإحصائيات دقيقة وواجهة سهلة الاستخدام</p>
+                    <div class="hero-buttons">
+                        <a href="#download" class="btn-primary">
+                            <i class="fas fa-download"></i>
+                            حمّل التطبيق مجاناً
+                        </a>
+                        <a href="#features" class="btn-secondary">
+                            <i class="fas fa-play-circle"></i>
+                            اعرف المزيد
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-image animate-in delay-2">
+                    <div class="phone-mockup">
+                        <div class="phone-screen">
+                            <div class="app-preview">
+                                <div class="preview-header">
+                                    <h3 style="margin-bottom: 10px;">نسبة الحفظ الإجمالية</h3>
+                                    <div style="font-size: 2.5rem; font-weight: 700;">3.6%</div>
+                                    <p style="opacity: 0.9;">225 / 6236 آية</p>
+                                </div>
+                                <div class="preview-stats">
+                                    <div class="stat-card">
+                                        <div class="stat-number">4/114</div>
+                                        <div class="stat-label">تم التحميل</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-number">23/114</div>
+                                        <div class="stat-label">تم الحفظ</div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 20px;">
+                                    <div style="background: white; padding: 15px; border-radius: 15px; margin-bottom: 10px; box-shadow: var(--shadow-sm);">
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <span style="font-weight: 600;">الفاتحة</span>
+                                            <span style="color: var(--primary-color); font-weight: 700;">57%</span>
+                                        </div>
+                                        <div style="background: #e2e8f0; height: 8px; border-radius: 4px; margin-top: 10px;">
+                                            <div style="background: var(--gradient-primary); height: 100%; width: 57%; border-radius: 4px;"></div>
+                                        </div>
+                                    </div>
+                                    <div style="background: white; padding: 15px; border-radius: 15px; box-shadow: var(--shadow-sm);">
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <span style="font-weight: 600;">فاطر</span>
+                                            <span style="color: var(--primary-color); font-weight: 700;">4%</span>
+                                        </div>
+                                        <div style="background: #e2e8f0; height: 8px; border-radius: 4px; margin-top: 10px;">
+                                            <div style="background: var(--gradient-primary); height: 100%; width: 4%; border-radius: 4px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>مميزات التطبيق الرئيسية</h2>
+                <p>اكتشف الميزات التي تجعل Easy Quran Hafiz رفيقك الأمثل في رحلة حفظ القرآن</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card animate-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>تتبع دقيق للحفظ</h3>
+                    <p>إحصائيات مفصلة على مستوى الآية والسورة والقرآن كاملاً، مع رسوم بيانية توضح تقدمك بشكل مرئي واضح</p>
+                </div>
+                <div class="feature-card animate-in delay-1">
+                    <div class="feature-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3>تخصيص كامل</h3>
+                    <p>تحكم في الخطوط والألوان واختيار القارئ المفضل والترجمات المتعددة لتناسب احتياجاتك الشخصية</p>
+                </div>
+                <div class="feature-card animate-in delay-2">
+                    <div class="feature-icon">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <h3>العمل دون اتصال</h3>
+                    <p>حمّل السور صوتياً وكتابياً للاستخدام في أي وقت ومكان دون الحاجة للاتصال بالإنترنت</p>
+                </div>
+                <div class="feature-card animate-in delay-3">
+                    <div class="feature-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h3>دعم متعدد اللغات</h3>
+                    <p>واجهة مستخدم وترجمات بأكثر من 20 لغة، مع خيار النطق اللاتيني لغير الناطقين بالعربية</p>
+                </div>
+                <div class="feature-card animate-in delay-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>تذكيرات وتحفيز</h3>
+                    <p>نظام تذكيرات منتظم وقوائم متابعة تحفزك على الاستمرار في رحلة الحفظ حتى الإتقان</p>
+                </div>
+                <div class="feature-card animate-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>واجهة سهلة الاستخدام</h3>
+                    <p>تصميم عصري وبديهي يسهل التنقل بين جميع أقسام التطبيق بسلاسة وسرعة</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screens Section -->
+    <section class="screens" id="screens">
+        <div class="container">
+            <div class="section-title">
+                <h2>شاشات التطبيق</h2>
+                <p>استكشف واجهات التطبيق المتنوعة والمصممة بعناية لتجربة مستخدم مثالية</p>
+            </div>
+            <div class="screens-grid">
+                <div class="screen-card">
+                    <div class="screen-image" style="background: linear-gradient(135deg, #10b981, #059669);">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="screen-info">
+                        <h3>الشاشة الرئيسية</h3>
+                        <p>نظرة عامة سريعة على حالة الحفظ والإحصائيات والسور الجارية</p>
+                    </div>
+                </div>
+                <div class="screen-card">
+                    <div class="screen-image" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div class="screen-info">
+                        <h3>قائمة السور</h3>
+                        <p>جميع سور القرآن مع تفاصيل الحفظ ونسب التقدم لكل سورة</p>
+                    </div>
+                </div>
+                <div class="screen-card">
+                    <div class="screen-image" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <div class="screen-info">
+                        <h3>التحميلات</h3>
+                        <p>إدارة الملفات المحملة للاستخدام دون اتصال بالإنترنت</p>
+                    </div>
+                </div>
+                <div class="screen-card">
+                    <div class="screen-image" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="screen-info">
+                        <h3>السور المحفوظة</h3>
+                        <p>لوحة تحكم متقدمة تظهر تفاصيل السور المكتملة والإنجازات</p>
+                    </div>
+                </div>
+                <div class="screen-card">
+                    <div class="screen-image" style="background: linear-gradient(135deg, #ec4899, #db2777);">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="screen-info">
+                        <h3>الإحصائيات والرسوم</h3>
+                        <p>خرائط كثافة ملونة ورسوم بيانية لتصور تقدم الحفظ</p>
+                    </div>
+                </div>
+                <div class="screen-card">
+                    <div class="screen-image" style="background: linear-gradient(135deg, #6b7280, #4b5563);">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <div class="screen-info">
+                        <h3>الإعدادات</h3>
+                        <p>خيارات تخصيص شاملة للخطوط والألوان والقراء واللغات</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section" id="stats">
+        <div class="container">
+            <div class="section-title">
+                <h2>إحصائيات التطبيق</h2>
+                <p>أرقام تعكس ثقة المستخدمين بتطبيق Easy Quran Hafiz</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <i class="fas fa-users"></i>
+                    <div class="number">+50,000</div>
+                    <div class="label">مستخدم نشط</div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-star"></i>
+                    <div class="number">4.8</div>
+                    <div class="label">تقييم متوسط</div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-globe"></i>
+                    <div class="number">+20</div>
+                    <div class="label">لغة مدعومة</div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-headphones"></i>
+                    <div class="number">+30</div>
+                    <div class="label">قارئ متاح</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="download">
+        <div class="container">
+            <h2>ابدأ رحلتك في حفظ القرآن اليوم</h2>
+            <p>حمّل تطبيق Easy Quran Hafiz مجاناً وابدأ رحلتك الروحانية</p>
+            <div class="download-buttons">
+                <a href="#" class="store-button">
+                    <i class="fab fa-apple"></i>
+                    <div>
+                        <div style="font-size: 0.8rem;">Download on the</div>
+                        <div style="font-size: 1.2rem;">App Store</div>
+                    </div>
+                </a>
+                <a href="#" class="store-button">
+                    <i class="fab fa-google-play"></i>
+                    <div>
+                        <div style="font-size: 0.8rem;">GET IT ON</div>
+                        <div style="font-size: 1.2rem;">Google Play</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Easy Quran Hafiz</h3>
+                    <p style="color: #cbd5e1; line-height: 1.8;">تطبيق متكامل لحفظ القرآن الكريم وتتبع التقدم بالإحصائيات الدقيقة والواجهة السهلة</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>روابط سريعة</h3>
+                    <ul>
+                        <li><a href="#home">الرئيسية</a></li>
+                        <li><a href="#features">المميزات</a></li>
+                        <li><a href="#screens">الشاشات</a></li>
+                        <li><a href="#stats">الإحصائيات</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>الدعم والمساعدة</h3>
+                    <ul>
+                        <li><a href="#">مركز المساعدة</a></li>
+                        <li><a href="#">الأسئلة الشائعة</a></li>
+                        <li><a href="#">اتصل بنا</a></li>
+                        <li><a href="#">سياسة الخصوصية</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>تواصل معنا</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope" style="margin-left: 10px;"></i> support@easyquranhafiz.com</li>
+                        <li><i class="fas fa-phone" style="margin-left: 10px;"></i> +966 50 000 0000</li>
+                        <li><i class="fas fa-map-marker-alt" style="margin-left: 10px;"></i> الرياض، المملكة العربية السعودية</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Easy Quran Hafiz. جميع الحقوق محفوظة</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .screen-card, .stat-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+            } else {
+                header.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+            }
+        });
+    </script>
+</body>
+</html>
